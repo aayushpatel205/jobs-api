@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { registerUser } from "../api/userApis";
 
-const Home = () => {
+const Register = () => {
   const [userDetails, setUserDetails] = useState({
     username: "",
     email: "",
@@ -96,7 +96,7 @@ const Home = () => {
               </Button>
             </Link>
 
-            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 10, alignItems: "center" , marginBottom: 10}}>
               Already have an account?
               <Link to="/login" style={{ textDecoration: "none" }}>
                 <p
@@ -118,4 +118,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Register;

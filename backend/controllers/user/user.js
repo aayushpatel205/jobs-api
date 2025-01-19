@@ -40,8 +40,7 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
     try {
-      const { email, password } = req.body;
-  
+      const { email, password } = req.query;
       // Check if email and password are provided
       if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required." });
