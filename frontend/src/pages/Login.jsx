@@ -61,9 +61,9 @@ const Login = () => {
                     return;
                   }
                   const data = await loginUser(userDetails);
-                  if (data.message === "Login successful.") {
-                    navigate("/jobs/home");
-                  }
+                  sessionStorage.setItem("token", data.token);
+                  sessionStorage.setItem("user_id", data.user._id);
+                  navigate("/jobs/home");
                 } catch (error) {
                   toast.error(error.response.data.message);
                 }

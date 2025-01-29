@@ -5,12 +5,15 @@ dotenv.config();
 
 const generateToken = (user) => {
   if (!user) return null;
-  return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: 30 });
+  return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
-export { generateToken };
 
 const jwtAuthMiddleware = (req, res, next) => {
+  if(req.headers.authorization === undefined){
+    return res.status(401).send({ message: "Please provide a token" });
+  }
+
   const token = req.headers.authorization.split(" ")[1];
   if (!token) return res.status(401).send({ message: "Unauthorized" });
 
@@ -23,4 +26,4 @@ const jwtAuthMiddleware = (req, res, next) => {
   }
 };
 
-export { jwtAuthMiddleware };
+export { jwtAuthMiddleware , generateToken };

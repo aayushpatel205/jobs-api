@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Card } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import { registerUser } from "../api/userApis";
 
 const Register = () => {
@@ -10,8 +10,7 @@ const Register = () => {
     email: "",
     password: "",
   });
-  const isDetailMissing =
-    !userDetails.password || !userDetails.email || !userDetails.username;
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -65,7 +64,6 @@ const Register = () => {
               value={userDetails.password}
             />
             <Link
-              to={isDetailMissing ? "/" : "/login"}
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -76,20 +74,28 @@ const Register = () => {
               <Button
                 variant="contained"
                 onClick={async () => {
-                  if (
-                    !userDetails.password ||
-                    !userDetails.email ||
-                    !userDetails.username
-                  ) {
-                    toast.warning("All fields are required");
-                    return;
+                  try{
+                    if (
+                      !userDetails.password ||
+                      !userDetails.email ||
+                      !userDetails.username
+                    ) {
+                      toast.warning("All fields are required");
+                      return;
+                    }
+                    const response = await registerUser(userDetails);
+                    setUserDetails({
+                      username: "",
+                      email: "",
+                      password: "",
+                    });
+
+                    if(response.message === "User registered successfully."){
+                      navigate("/login");
+                    }
+                  }catch(error){
+                    toast.warning(error.response.data.message);
                   }
-                  await registerUser(userDetails);
-                  setUserDetails({
-                    username: "",
-                    email: "",
-                    password: "",
-                  });
                 }}
               >
                 Register
