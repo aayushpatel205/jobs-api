@@ -1,5 +1,5 @@
 import express from "express";
-import { createJob, getAllJobs, editJob } from "../../controllers/jobs/jobs.js";
+import { createJob, getAllJobs, editJob, getJobById, deleteJob } from "../../controllers/jobs/jobs.js";
 
 const router = express.Router();
 
@@ -11,5 +11,7 @@ router.get("/get-job", (req, res) => {
 
 router.get("/all-jobs", getAllJobs);
 router.put("/edit-job/:id", editJob);
+router.get("/get-job/:id", getJobById);
+router.delete("/delete-job/:id", deleteJob);
 
 export default router;

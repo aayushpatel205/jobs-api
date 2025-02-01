@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Button, Card, TextField } from "@mui/material";
-import { createJob, editJobs, getJobs } from "../api/jobApis";
+import { createJob, deleteJobById, getJobs } from "../api/jobApis";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [job, setJob] = useState({
@@ -14,11 +15,13 @@ const HomePage = () => {
     try {
       const data = await getJobs();
       console.log("The data is", data);
-      setAllJobs(data);
+      setAllJobs(data || []); // Ensure empty array if data is undefined
     } catch (error) {
       console.log(error);
+      setAllJobs([]); // Set empty array to avoid undefined issues
     }
   };
+  
 
   useEffect(() => {
     getAllJobs();
@@ -27,8 +30,8 @@ const HomePage = () => {
     <>
       <div
         style={{
-          height: "100vh",
-          width: "100vw",
+          height: "100%",
+          width: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -96,60 +99,91 @@ const HomePage = () => {
             justifyContent: "space-around",
           }}
         >
-          {allJobs &&
+          {allJobs?.length > 0 &&
             allJobs.map((job) => {
+              let statusColor = "#ffc107";
+              if(job.status === "interview"){
+                  statusColor = "green";
+              }else if(job.status === "declined"){
+                  statusColor = "red";
+              }
               return (
                 <Card
                   variant="outlined"
                   style={{
-                    width: 290,
-                    height: 130,
+                    width: 310,
+                    height: 200,
                     borderRadius: 15,
                     marginTop: 25,
                     padding: "0px 20px",
                     display: "flex",
                     flexDirection: "column",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <p style={{ fontSize: 20, marginBottom: -10 }}>
-                    {job.position}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 13,
-                      backgroundColor: "#d3d3d3",
-                      borderRadius: 7,
-                      padding: "0px 7px",
-                      display: "inline-block",
-                      width: "fit-content",
-                    }}
-                  >
-                    {job.company}
-                  </p>
-
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <Button
-                      onClick={async() => {
-                        const response = await editJobs(job, job._id);
-                        toast.success(response.message);
-                      }}
-                      size="small"
-                      sx={{
-                        backgroundColor: "purple",
-                        color: "white",
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <p
+                      style={{
+                        fontSize: 20,
+                        marginBottom: -10,
+                        fontWeight: 600,
+                        maxWidth: 280,
                       }}
                     >
-                      Edit
-                    </Button>
-                    <Button
-                      size="small"
-                      sx={{
-                        backgroundColor: "red",
-                        color: "white",
+                      {job.position}
+                    </p>
+                    <div style={{display: 'flex',gap: 5}}>
+                      <p>Status:</p>
+                      <p style={{color: statusColor,fontWeight: 600}}>{job.status}</p>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: 15,
+                        backgroundColor: "#d3d3d3",
+                        borderRadius: 5,
+                        padding: "0px 7px",
+                        display: "inline-block",
+                        width: "fit-content",
+                        maxWidth: 280
+                      }}
+                    >
+                      {job.company}
+                    </p>
+                  </div>
+
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <Link
+                      to={`/jobs/edit-job/${job._id}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <p
+                        style={{
+                          fontWeight: 500,
+                          color: "green",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Edit
+                      </p>
+                    </Link>
+
+                    <p
+                      style={{
+                        fontWeight: 500,
+                        color: "red",
+                        cursor: "pointer",
+                      }}
+                      onClick={async()=>{
+                          try {
+                            const response = await deleteJobById(job._id);
+                            toast.success(response.message);
+                          } catch (error) {
+                            toast.error(error.response.data.message);
+                          }
                       }}
                     >
                       Delete
-                    </Button>
+                    </p>
                   </div>
                 </Card>
               );

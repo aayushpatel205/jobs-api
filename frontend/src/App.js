@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import EditPage from "./pages/EditPage";
 
 const App = () => {
   const location = useLocation();
@@ -26,6 +27,16 @@ const App = () => {
         }
       />
       <Route />
+      <Route
+        path="/jobs/edit-job/:id"
+        element={
+          <ProtectedRoute>
+            <EditPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route />
+
     </Routes>
   );
 };

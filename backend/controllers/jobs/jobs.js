@@ -51,3 +51,24 @@ export const editJob = async (req, res) => {
     return res.status(500).send({ message: "Internal server error." });
   }
 };
+
+export const getJobById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const job = await Job.findById(id);
+    return res.status(200).send({ message: "Job fetched successfully.", job });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send({ message: "Internal server error." });
+  }
+};
+
+export const deleteJob = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Job.findByIdAndDelete(id);
+    return res.status(200).send({ message: "Job deleted successfully." });
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error." });
+  }
+};

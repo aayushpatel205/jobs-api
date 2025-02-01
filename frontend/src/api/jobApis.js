@@ -21,21 +21,34 @@ export const createJob = async (job) => {
 };
 
 export const getJobs = async () => {
-  try{
-    const data = await axios.get("http://localhost:8000/jobs/all-jobs",{
+  const token = sessionStorage.getItem("token");
+  try {
+    const data = await axios.get("http://localhost:8000/jobs/all-jobs", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     return data?.data.jobs;
-  }catch{
+  } catch {
     console.log("Couldn't find jobs");
   }
 };
 
-export const editJobs = async (job,id) => {
+export const getJobById = async (id) => {
   try {
-    console.log("This is executed for editing !!");
+    const data = await axios.get(`http://localhost:8000/jobs/get-job/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data?.data.job;
+  } catch {
+    console.log("Couldn't find the requested job!!");
+  }
+};
+
+export const editJobs = async (job, id) => {
+  try {
     const response = await axios.put(
       `http://localhost:8000/jobs/edit-job/${id}`,
       job,
@@ -48,5 +61,18 @@ export const editJobs = async (job,id) => {
     return response.data;
   } catch (error) {
     console.log("Couldn't edit job", error);
+  }
+};
+
+export const deleteJobById = async (id) => {
+  try {
+    const response = await axios.delete(`http://localhost:8000/jobs/delete-job/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Couldn't delete job", error);
   }
 };
