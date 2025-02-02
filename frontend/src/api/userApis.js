@@ -8,7 +8,7 @@ export const registerUser = async (user) => {
   };
   try {
     const response = await axios.post(
-      "http://localhost:8000/auth/register",
+      "https://jobs-api-ecru.vercel.app/auth/register",
       newUser
     );
     return response.data;
@@ -19,7 +19,7 @@ export const registerUser = async (user) => {
 
 export const loginUser = async (user) => {
   try {
-    const response = await axios.get("http://localhost:8000/auth/login", {
+    const response = await axios.get("https://jobs-api-ecru.vercel.app/auth/login", {
       params: user,
     });
 

@@ -5,7 +5,7 @@ export const createJob = async (job) => {
   const newJob = { ...job, createdBy: sessionStorage.getItem("user_id") };
   try {
     const response = await axios.post(
-      "http://localhost:8000/jobs/create",
+      "https://jobs-api-ecru.vercel.app/jobs/create",
       newJob,
       {
         headers: {
@@ -23,7 +23,7 @@ export const createJob = async (job) => {
 export const getJobs = async () => {
   const token = sessionStorage.getItem("token");
   try {
-    const data = await axios.get("http://localhost:8000/jobs/all-jobs", {
+    const data = await axios.get("https://jobs-api-ecru.vercel.app/jobs/all-jobs", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -36,7 +36,7 @@ export const getJobs = async () => {
 
 export const getJobById = async (id) => {
   try {
-    const data = await axios.get(`http://localhost:8000/jobs/get-job/${id}`, {
+    const data = await axios.get(`https://jobs-api-ecru.vercel.app/jobs/get-job/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -50,7 +50,7 @@ export const getJobById = async (id) => {
 export const editJobs = async (job, id) => {
   try {
     const response = await axios.put(
-      `http://localhost:8000/jobs/edit-job/${id}`,
+      `https://jobs-api-ecru.vercel.app/jobs/edit-job/${id}`,
       job,
       {
         headers: {
@@ -66,7 +66,7 @@ export const editJobs = async (job, id) => {
 
 export const deleteJobById = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:8000/jobs/delete-job/${id}`, {
+    const response = await axios.delete(`https://jobs-api-ecru.vercel.app/jobs/delete-job/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
